@@ -74,10 +74,6 @@ public class Articles {
 
         Articles articles = (Articles) o;
 
-        if (!Objects.equals(name, articles.name)) return false;
-        if (!Objects.equals(price, articles.price)) return false;
-        if (!Objects.equals(stock, articles.stock)) return false;
-        if (!Objects.equals(image, articles.image)) return false;
         if (!Objects.equals(id, articles.id)) return false;
 
         return true;

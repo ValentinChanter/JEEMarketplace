@@ -1,6 +1,7 @@
 package com.cytech.marketplace.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class Users {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
     public String getName() {
@@ -84,12 +85,6 @@ public class Users {
 
         Users users = (Users) o;
 
-        if (!Objects.equals(email, users.email)) return false;
-        if (!Objects.equals(password, users.password)) return false;
-        if (!Objects.equals(name, users.name)) return false;
-        if (!Objects.equals(isAdmin, users.isAdmin)) return false;
-        if (!Objects.equals(loyaltyPoints, users.loyaltyPoints))
-            return false;
         if (!Objects.equals(id, users.id)) return false;
 
         return true;
