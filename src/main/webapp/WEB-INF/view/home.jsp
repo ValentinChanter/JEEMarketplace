@@ -7,7 +7,7 @@
 <body>
     <div class="flex h-[100px] w-full flex-row justify-between p-4 shadow-xl">
         <div class="flex w-48 flex-col justify-center bg-gray-400 text-center">Logo</div>
-        <form class="rounded-full bg-blue-400 text-white my-2 px-4 flex flex-col justify-center" action="login-controller">
+        <form class="rounded-full bg-blue-400 text-white my-2 px-4 flex flex-col justify-center" action="login" method="get">
             <button type="submit">Connexion</button>
         </form>
     </div>
