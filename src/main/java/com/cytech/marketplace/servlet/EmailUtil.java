@@ -12,10 +12,10 @@ public class EmailUtil {
 
     /**
      * Utility method to send simple HTML email
-     * @param session
-     * @param toEmail
-     * @param subject
-     * @param body
+     * @param session   - the session to use
+     * @param toEmail   - the email address to send to
+     * @param subject   - the subject of the email
+     * @param body      - the body of the email
      */
     public static void sendEmail(Session session, String toEmail, String subject, String body){
         try
@@ -39,7 +39,7 @@ public class EmailUtil {
             Transport.send(msg);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
