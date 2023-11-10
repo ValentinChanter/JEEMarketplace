@@ -15,9 +15,10 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (UsersDAO.login(req.getParameter("email"), req.getParameter("password"))) {
             req.getSession().setAttribute("user", UsersDAO.getUser(req.getParameter("email")));
-            resp.sendRedirect("/main-controller");
+            resp.sendRedirect(getServletContext().getContextPath() + "/home");
         } else {
-            req.setAttribute("error", true);
+            req.setAttribute("error", "Email ou mot de passe incorrect. Veuillez réessayer.");
+            req.setAttribute("email", req.getParameter("email"));
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
         }
     }
