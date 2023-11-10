@@ -11,7 +11,7 @@ import java.io.IOException;
 @WebServlet(name = "loginController", value = "/login")
 public class LoginController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
     }
 }
