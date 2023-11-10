@@ -27,6 +27,15 @@ public class Articles {
     @Column(name = "id")
     private UUID id;
 
+    public Articles(String nom, BigDecimal prix, BigInteger stock, String image) {
+        this.name = nom;
+        this.price = prix;
+        this.stock = stock;
+        this.image = image;
+    }
+
+    public Articles() {}
+
     public String getName() {
         return name;
     }
