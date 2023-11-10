@@ -22,8 +22,12 @@
 <%
     for(Articles a : articles) {
 %>
-
-<%= a.getName() %>
+<form action="modifydelete-servlet" method="post">
+    Nom du produit : <input name="nom" type="text" value="<%= a.getName() %>" readonly>
+    ID du produit : <input name="id" type="text" value="<%= a.getId() %>" readonly>
+    <button type="submit" name="modifier">Modifier</button>
+    <button type="submit" name="supprimer">Supprimer</button>
+</form>
 <br>
 
 <%
