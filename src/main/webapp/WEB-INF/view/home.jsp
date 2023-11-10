@@ -6,5 +6,10 @@
 </head>
 <body>
     <%@ include file="components/header.jsp" %>
+    <form action="productManagement" method="get">
+    <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">
+        Gestion des produits
+    </button>
+    </form>
 </body>
 </html>
