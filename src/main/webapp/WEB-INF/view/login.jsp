@@ -1,4 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:if test="${not empty user}">
+    <c:redirect url="home" />
+</c:if>
+
 <html>
 <head>
     <title>Connexion</title>
@@ -24,7 +30,7 @@
                     </div>
                     <button type="submit" class="w-full rounded-full bg-blue-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-500 focus:outline-none">Se connecter</button>
                 </form>
-                <form>
+                <form action="signup" method="POST">
                     <span class="mb-4 block text-sm font-medium text-gray-900">Pas encore inscrit ?</span>
                     <button type="submit" class="w-full rounded-full bg-blue-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-500 focus:outline-none">S'inscrire</button>
                 </form>

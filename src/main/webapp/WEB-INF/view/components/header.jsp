@@ -3,7 +3,7 @@
 
 <html>
 <body>
-<div class="flex h-[100px] w-full flex-row justify-between p-4 shadow-xl">
+<div class="flex h-[100px] w-full flex-row justify-between p-4 shadow-lg">
     <div class="flex w-48 flex-col justify-center bg-gray-400 text-center">Logo</div>
     <form class="flex h-[calc(100px-2*1rem)] w-[150px] flex-col justify-center" action=
         <c:choose>

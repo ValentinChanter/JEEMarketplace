@@ -8,15 +8,15 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "loginController", value = "/login")
-public class LoginController extends HttpServlet {
+@WebServlet(name = "signupController", value = "/signup")
+public class SignupController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/signup.jsp").forward(req, resp);
     }
 }
