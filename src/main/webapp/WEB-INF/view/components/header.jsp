@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
@@ -15,16 +15,16 @@
             </c:otherwise>
         </c:choose>
     method="post">
-    <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">
-        <c:choose>
-            <c:when test="${empty user}">
-                Connexion
-            </c:when>
-            <c:otherwise>
-                Déconnexion
-            </c:otherwise>
-        </c:choose>
-    </button>
+        <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">
+            <c:choose>
+                <c:when test="${empty user}">
+                    Connexion
+                </c:when>
+                <c:otherwise>
+                    Déconnexion
+                </c:otherwise>
+            </c:choose>
+        </button>
     </form>
 </div>
 </body>
