@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.UUID;
 
 @WebServlet(name = "modifyProductServlet", value = "/modifyProduct-servlet")
 public class ModifyProductServlet extends HttpServlet {
@@ -42,9 +43,9 @@ public class ModifyProductServlet extends HttpServlet {
         boolean correctValues = checkValues(nom, prix, stock, image);
 
         if(correctValues) {
-            // Modifier produit dans la bdd
-//            Articles newProduct = new Articles(nom, new BigDecimal(prix), new BigInteger(stock), image);
-//            ArticlesDAO.addArticle(newProduct);
+            Articles modifiedProduct = new Articles(nom, new BigDecimal(prix), new BigInteger(stock), image);
+            modifiedProduct.setId(UUID.fromString(id));
+            ArticlesDAO.updateArticle(modifiedProduct);
             req.getRequestDispatcher("/WEB-INF/view/productManagement.jsp").forward(req, resp);
         }
         else {
