@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Panier</title>
@@ -19,7 +19,7 @@
                 <c:forEach items="${sessionScope.cart}" var="item">
                     <div class="flex flex-row justify-between mb-2 shadow-md p-4 rounded-md">
                         <div class="flex flex-row">
-                            <img class="mr-8 max-h-[100px]" src="${item.key.getImage()}" />
+                            <img class="mr-8 max-h-[100px]" src="${item.key.getImage()}" alt="${item.key.getName()}" />
                             <div class="flex flex-col justify-center text-lg font-semibold">${item.key.getName()}</div>
                          </div>
                         <div class="flex flex-row">
@@ -27,7 +27,7 @@
                                 <button class="rounded-full bg-blue-400 h-8 w-8 text-white hover:bg-blue-500 focus:outline-none">-</button>
                             </div>
                             <div class="mx-4 flex flex-col justify-center">
-                                <input class="block w-16 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-none" value="${item.value}"></button>
+                                <input class="block w-16 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-none" value="${item.value}" />
                             </div>
                             <div class="flex flex-col justify-center">
                                 <button class="rounded-full bg-blue-400 h-8 w-8 text-white hover:bg-blue-500 focus:outline-none">+</button>
