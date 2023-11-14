@@ -4,6 +4,7 @@ import com.cytech.marketplace.entity.Articles;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,5 +66,20 @@ public class ArticlesDAO {
         List<Articles> articles = em.createQuery("FROM Articles", Articles.class).getResultList();
         em.close();
         return articles;
+    }
+
+    public static boolean checkStock(Articles article, int quantity) {
+        Articles updatedArticle = getArticle(article.getId());
+        return updatedArticle.getStock().compareTo(BigInteger.valueOf(quantity)) >= 0;
+    }
+
+    public static boolean checkStock(String name, int quantity) {
+        Articles updatedArticle = getArticle(name);
+        return updatedArticle.getStock().compareTo(BigInteger.valueOf(quantity)) >= 0;
+    }
+
+    public static boolean checkStock(UUID uuid, int quantity) {
+        Articles updatedArticle = getArticle(uuid);
+        return updatedArticle.getStock().compareTo(BigInteger.valueOf(quantity)) >= 0;
     }
 }
