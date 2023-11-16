@@ -44,7 +44,7 @@
             </c:otherwise>
         </c:choose>
         </div>
-        <form action="payment" method="post">
+        <form action="infopersonnal" method="post">
           <button type="submit" class="w-full rounded-full bg-blue-400 px-5 py-3 text-center text-md font-medium text-white hover:bg-blue-500 focus:outline-none">Procéder au paiement</button>
         </form>
     </div>
