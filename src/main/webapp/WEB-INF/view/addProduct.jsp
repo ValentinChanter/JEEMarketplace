@@ -7,6 +7,7 @@
 <%
     boolean error = false;
     Object errorObject = request.getAttribute("error");
+    request.removeAttribute("error");
 
     if(errorObject != null) {
         error = (boolean) errorObject;
