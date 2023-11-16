@@ -38,13 +38,13 @@
             if(error) {
         %>
 
-        <p class="text-red-600 text-xl font-extrabold px-8 py-2">Il y a une ou plusieurs erreur(s) dans la saisie de vos informations personnelles.</p>
+        <p class="text-red-600 text-l font-extrabold py-2">Il y a une ou plusieurs erreur(s) dans la saisie de vos informations personnelles.</p>
 
         <%
             }
         %>
 
-        <form action="infoPersonnal-servlet" method="post">
+        <form action="infoPersonnal-servlet" method="post" class="pt-8">
             <div class="relative z-0 w-full mb-6 group">
                 <input type="text" name="nomComplet" id="nomComplet" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="<%=user.getName()%>" required />
                 <label for="nomComplet" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nom complet</label>
