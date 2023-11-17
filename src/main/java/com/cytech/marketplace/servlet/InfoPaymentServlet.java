@@ -1,5 +1,7 @@
 package com.cytech.marketplace.servlet;
 
+import com.cytech.marketplace.dao.ArticlesDAO;
+import com.cytech.marketplace.entity.Articles;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Map;
 
 @WebServlet(name = "infoPaymentServlet", value = "/infoPayment-servlet")
 public class InfoPaymentServlet extends HttpServlet {
@@ -35,9 +39,24 @@ public class InfoPaymentServlet extends HttpServlet {
 
         boolean correctValues = checkValues(nomCarte, numeroCarte, dateExpiration, codeCarte);
 
-        //TODO: mettre à jour les stocks des produits commandés
-
         if(correctValues) {
+
+            Object cartObject = req.getSession().getAttribute("cart");
+            Map<Articles, Integer> cart = null;
+            if(cartObject != null) {
+                cart = (Map<Articles, Integer>) cartObject;
+            }
+
+            for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
+                Articles modifiedArticle = article.getKey();
+                modifiedArticle.setStock(BigInteger.valueOf(modifiedArticle.getStock().intValue() - article.getValue()));
+                ArticlesDAO.updateArticle(modifiedArticle);
+            }
+
+            req.removeAttribute("cart");
+
+            //TODO : faire un mail de confirmation avec un résumé de la commande
+
             req.getRequestDispatcher("/WEB-INF/view/confirmationPayment.jsp").forward(req, resp);
         }
         else {
