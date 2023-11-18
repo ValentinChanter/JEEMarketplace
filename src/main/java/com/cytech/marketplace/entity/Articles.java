@@ -83,9 +83,7 @@ public class Articles {
 
         Articles articles = (Articles) o;
 
-        if (!Objects.equals(id, articles.id)) return false;
-
-        return true;
+        return id.equals(articles.id);
     }
 
     @Override

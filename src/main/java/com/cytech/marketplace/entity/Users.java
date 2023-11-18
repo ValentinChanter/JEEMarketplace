@@ -96,9 +96,7 @@ public class Users {
 
         Users users = (Users) o;
 
-        if (!Objects.equals(id, users.id)) return false;
-
-        return true;
+        return id.equals(users.id);
     }
 
     @Override
