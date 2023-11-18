@@ -124,7 +124,7 @@ public class UsersDAO {
     }
 
     /**
-     * Add an article to the database cart.
+     * Add an article to the database cart. If it already exists, sums the quantities.
      * @param user      The user to add the article to the cart.
      * @param article   The article to add to the cart.
      * @param quantity  The quantity of the article to add to the cart.

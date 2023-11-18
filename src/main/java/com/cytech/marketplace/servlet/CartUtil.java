@@ -20,7 +20,7 @@ public class CartUtil {
     }
 
     /**
-     * Add an article to the session cart. If the user is logged in, add the article to the database cart.
+     * Add an article to the session cart. If the user is logged in, also add the article to the database cart.
      * @param req       The request
      * @param article   The article to add
      * @param quantity  The quantity of the article to add
