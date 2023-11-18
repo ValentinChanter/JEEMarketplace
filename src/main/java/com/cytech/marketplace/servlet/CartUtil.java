@@ -1,5 +1,6 @@
 package com.cytech.marketplace.servlet;
 
+import com.cytech.marketplace.dao.ArticlesDAO;
 import com.cytech.marketplace.dao.UsersDAO;
 import com.cytech.marketplace.entity.Articles;
 import com.cytech.marketplace.entity.Users;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class CartUtil {
     /**
@@ -59,5 +61,41 @@ public class CartUtil {
 
         UsersDAO.setCart(users, databaseCart);
         req.getSession().setAttribute("cart", databaseCart);
+    }
+
+    public static void emptyCart(HttpServletRequest req) {
+        req.getSession().removeAttribute("cart");
+        Users users = (Users) req.getSession().getAttribute("user");
+        if (users != null) {
+            UsersDAO.emptyCart(users);
+        }
+    }
+
+    public static String cartToString(Map<Articles, Integer> cart) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Articles, Integer> entry : cart.entrySet()) {
+            sb.append(entry.getKey().getId().toString());
+            sb.append(":");
+            sb.append(entry.getValue());
+            sb.append(",");
+        }
+        return sb.toString();
+    }
+
+    public static Map<Articles, Integer> stringToCart(String cart) {
+        Map<Articles, Integer> cartMap = new HashMap<>();
+
+        if (cart == null || cart.isEmpty()) {
+            return cartMap;
+        }
+
+        String[] cartArray = cart.split(",");
+        for (String cartItem : cartArray) {
+            String[] cartItemArray = cartItem.split(":");
+            Articles article = ArticlesDAO.getArticle(UUID.fromString(cartItemArray[0]));
+            int quantity = Integer.parseInt(cartItemArray[1]);
+            cartMap.put(article, quantity);
+        }
+        return cartMap;
     }
 }

@@ -86,41 +86,17 @@ public class UsersDAO {
         return BCrypt.checkpw(password, user.getPassword());
     }
 
-    public static String cartToString(Map<Articles, Integer> cart) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Articles, Integer> entry : cart.entrySet()) {
-            sb.append(entry.getKey().getId().toString());
-            sb.append(":");
-            sb.append(entry.getValue());
-            sb.append(",");
-        }
-        return sb.toString();
-    }
-
-    public static Map<Articles, Integer> stringToCart(String cart) {
-        Map<Articles, Integer> cartMap = new HashMap<>();
-
-        if (cart == null || cart.isEmpty()) {
-            return cartMap;
-        }
-
-        String[] cartArray = cart.split(",");
-        for (String cartItem : cartArray) {
-            String[] cartItemArray = cartItem.split(":");
-            Articles article = ArticlesDAO.getArticle(UUID.fromString(cartItemArray[0]));
-            int quantity = Integer.parseInt(cartItemArray[1]);
-            cartMap.put(article, quantity);
-        }
-        return cartMap;
-    }
-
     public static Map<Articles, Integer> getCart(Users user) {
         return stringToCart(user.getCart());
     }
 
     public static void setCart(Users user, Map<Articles, Integer> cart) {
-        user.setCart(cartToString(cart));
+        user.setCart(cart == null ? null : cartToString(cart));
         updateUser(user);
+    }
+
+    public static void emptyCart(Users user) {
+        setCart(user, null);
     }
 
     /**
