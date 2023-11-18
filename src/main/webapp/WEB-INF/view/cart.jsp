@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cytech.marketplace.dao.ArticlesDAO" %>
 <html>
 <head>
     <title>Panier</title>
@@ -13,6 +13,9 @@
 <div class="flex flex-row justify-center pt-8">
     <div class="w-5/6 p-8">
         <h2 class="text-2xl font-semibold mb-2">Récapitulatif de vos achats</h2>
+        <c:if test="${not empty error}">
+            <div class="mb-4 rounded-md bg-red-400 p-2.5 text-center text-sm font-medium text-white">${error}</div>
+        </c:if>
         <form action="checkStockPostCart-servlet" method="post">
             <div class="mb-8 flex w-full flex-col">
                 <c:choose>
@@ -36,9 +39,9 @@
                                         value="${item.value}"
                                         type="number"
                                         step="1"
-                                        min="0"
-                                        max="${item.key.getStock()}"
-                                        onkeyup="if(this.value > ${item.key.getStock()}) this.value = ${item.key.getStock()}; if(this.value < 0) this.value = 0;"
+                                        min="1"
+                                        max="${ArticlesDAO.getArticle(item.key.getId()).getStock()}"
+                                        onkeyup="if(this.value > ${ArticlesDAO.getArticle(item.key.getId()).getStock()}) this.value = ${ArticlesDAO.getArticle(item.key.getId()).getStock()}; if(this.value < 0) this.value = 0;"
                                     />
                                 </div>
                             </div>

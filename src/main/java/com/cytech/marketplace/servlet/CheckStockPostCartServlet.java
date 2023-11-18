@@ -21,7 +21,7 @@ public class CheckStockPostCartServlet extends HttpServlet {
             String value = req.getParameter(parameterName);
             String name = parameterName.substring(0, parameterName.indexOf("-input"));
             if (!ArticlesDAO.checkStock(UUID.fromString(name), Integer.parseInt(value))) {
-                req.setAttribute("error", true);
+                req.setAttribute("error", "Une erreur de stock est survenue. Veuillez réessayer.");
                 req.getRequestDispatcher("/WEB-INF/view/cart.jsp").forward(req, resp);
                 return;
             }
