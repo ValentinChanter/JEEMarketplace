@@ -1,5 +1,6 @@
 package com.cytech.marketplace.servlet;
 
+import com.cytech.marketplace.entity.Articles;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
 
 @WebServlet(name = "infoPersonnalServlet", value = "/infoPersonnal-servlet")
 public class InfoPersonnalServlet extends HttpServlet {
@@ -33,6 +36,14 @@ public class InfoPersonnalServlet extends HttpServlet {
         boolean correctValues = checkValues(nom, adresse, telephone);
 
         if(correctValues) {
+            Map<Articles, Integer> cart = CartUtil.getCart(req);
+
+            BigDecimal total = new BigDecimal(0);
+            for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
+                total = total.add(article.getKey().getPrice().multiply(BigDecimal.valueOf(article.getValue())));
+            }
+            req.getSession().setAttribute("total", total);
+
             req.getRequestDispatcher("/WEB-INF/view/infopayment.jsp").forward(req, resp);
         }
         else {

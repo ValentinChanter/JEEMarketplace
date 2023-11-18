@@ -1,7 +1,9 @@
 package com.cytech.marketplace.servlet;
 
 import com.cytech.marketplace.dao.ArticlesDAO;
+import com.cytech.marketplace.dao.UsersDAO;
 import com.cytech.marketplace.entity.Articles;
+import com.cytech.marketplace.entity.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
 
@@ -49,21 +52,18 @@ public class InfoPaymentServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String nomCarte = req.getParameter("nomCarte");
         String numeroCarte = req.getParameter("numeroCarte");
         String dateExpiration = req.getParameter("dateExpiration");
         String codeCarte = req.getParameter("codeCarte");
+        String usePointsString = req.getParameter("usePoints");
+        boolean usePoints = usePointsString.equals("on");
 
         boolean correctValues = checkValues(nomCarte, numeroCarte, dateExpiration, codeCarte);
 
         if(correctValues) {
-
-            Object cartObject = req.getSession().getAttribute("cart");
-            Map<Articles, Integer> cart = null;
-            if(cartObject != null) {
-                cart = (Map<Articles, Integer>) cartObject;
-            }
+            Users user = (Users) req.getSession().getAttribute("user");
+            Map<Articles, Integer> cart = CartUtil.getCart(req);
 
             for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
                 Articles modifiedArticle = article.getKey();
@@ -71,7 +71,16 @@ public class InfoPaymentServlet extends HttpServlet {
                 ArticlesDAO.updateArticle(modifiedArticle);
             }
 
-            req.removeAttribute("cart");
+            BigDecimal total = (BigDecimal) req.getSession().getAttribute("total");
+            if (usePoints) {
+                total = total.subtract(new BigDecimal(user.getLoyaltyPoints()).divide(new BigDecimal(100)));
+                UsersDAO.removeLoyaltyPoints(user, user.getLoyaltyPoints().subtract(total.toBigInteger()));
+            } else {
+                UsersDAO.addLoyaltyPoints(user, total.intValue());
+            }
+
+            req.getSession().removeAttribute("total");
+            CartUtil.emptyCart(req);
 
             //TODO : faire un mail de confirmation avec un résumé de la commande
 

@@ -6,7 +6,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.math.BigInteger;
 import java.util.*;
+
+import static com.cytech.marketplace.servlet.CartUtil.cartToString;
+import static com.cytech.marketplace.servlet.CartUtil.stringToCart;
 
 public class UsersDAO {
     public static void addUser(Users user) {
@@ -113,5 +117,15 @@ public class UsersDAO {
             cart.put(article, quantity);
         }
         setCart(user, cart);
+    }
+
+    public static void addLoyaltyPoints(Users user, int points) {
+        user.setLoyaltyPoints(user.getLoyaltyPoints().add(BigInteger.valueOf(points)));
+        updateUser(user);
+    }
+
+    public static void removeLoyaltyPoints(Users user, BigInteger points) {
+        user.setLoyaltyPoints(user.getLoyaltyPoints().subtract(points));
+        updateUser(user);
     }
 }

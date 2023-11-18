@@ -39,6 +39,25 @@
                     <label for="codeCarte" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Code de carte (CVC)</label>
                 </div>
             </div>
+            <div class="mb-6">
+                <input id="usePoints" name="usePoints" type="checkbox" onchange="function updateTotal() {
+                    let total = ${sessionScope.get("total")};
+                    let awardedLoyaltyPoints = Math.floor(total);
+                    let discount = ${Math.round(sessionScope.get("user").getLoyaltyPoints().doubleValue()) / 100.0};
+
+                    if (document.getElementById('usePoints').checked) total -= discount;
+                    document.getElementById('total').innerHTML = 'Total : ' + total.toFixed(2) + '€';
+
+                    if (Math.floor(total) < Math.floor(${sessionScope.get("total")})) awardedLoyaltyPoints = Math.floor(total);
+                    document.getElementById('awardedLoyaltyPoints').innerHTML = 'Cet achat vous rapportera ' + awardedLoyaltyPoints + ` point\${awardedLoyaltyPoints <= 1 ? '' : 's'} de fidélité`;
+                }
+                updateTotal()" />
+                <label for="usePoints" class="text-sm">Utiliser vos ${sessionScope.get("user").getLoyaltyPoints()} points de fidélité (- ${String.format("%.2f", Math.round(sessionScope.get("user").getLoyaltyPoints().doubleValue()) / 100.0)}€)</label>
+            </div>
+            <div class="mb-6">
+                <p class="text-2xl font-semibold" id="total">Total : ${sessionScope.get("total")}€</p>
+                <p class="text-sm text-gray-500" id="awardedLoyaltyPoints">Cet achat vous rapportera ${String.format("%.0f", sessionScope.get("total"))} points de fidélité</p>
+            </div>
             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Valider</button>
         </form>
     </div>
