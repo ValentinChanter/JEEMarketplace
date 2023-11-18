@@ -1,19 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.lang.Math, java.lang.String" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
     <title>Informations de paiement</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-
-<%
-    boolean error = false;
-    Object errorObject = request.getAttribute("error");
-    request.removeAttribute("error");
-
-    if(errorObject != null) {
-        error = (boolean) errorObject;
-    }
-%>
 
 <body>
 <%@ include file="components/header.jsp" %>
@@ -23,15 +16,9 @@
     <div class="flex-1 grow">
         <h1 class="text-4xl font-extrabold dark:text-black pt-5 pb-8">Informations personnelles</h1>
 
-        <%
-            if(error) {
-        %>
-
-        <p class="text-red-600 text-l font-extrabold py-2">Il y a une ou plusieurs erreur(s) dans la saisie de vos informations de paiement.</p>
-
-        <%
-            }
-        %>
+        <c:if test="${not empty error}">
+            <p class="text-red-600 text-l font-extrabold py-2">${error}</p>
+        </c:if>
 
         <form action="infoPayment-servlet" method="post" class="pt-8">
             <div class="relative z-0 w-full mb-6 group">

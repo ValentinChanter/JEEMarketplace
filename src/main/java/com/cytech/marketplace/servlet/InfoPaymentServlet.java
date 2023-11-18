@@ -60,7 +60,11 @@ public class InfoPaymentServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/view/confirmationPayment.jsp").forward(req, resp);
         }
         else {
-            req.setAttribute("error", true);
+            if (!checkLuhn(numeroCarte)) {
+                req.setAttribute("error", "Votre numéro de carte n'est pas valide");
+            } else {
+                req.setAttribute("error", "Veuillez remplir tous les champs");
+            }
             req.getRequestDispatcher("/WEB-INF/view/infopayment.jsp").forward(req, resp);
         }
     }
