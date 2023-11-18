@@ -25,6 +25,9 @@ public class Users {
     @Basic
     @Column(name = "loyalty_points")
     private BigInteger loyaltyPoints;
+    @Basic
+    @Column(name = "cart")
+    private String cart;
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     @Column(name = "id")
@@ -70,6 +73,14 @@ public class Users {
         this.loyaltyPoints = loyaltyPoints;
     }
 
+    public String getCart() {
+        return cart;
+    }
+
+    public void setCart(String cart) {
+        this.cart = cart;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -97,6 +108,7 @@ public class Users {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (isAdmin != null ? isAdmin.hashCode() : 0);
         result = 31 * result + (loyaltyPoints != null ? loyaltyPoints.hashCode() : 0);
+        result = 31 * result + (cart != null ? cart.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }

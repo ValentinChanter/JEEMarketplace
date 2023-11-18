@@ -1,15 +1,12 @@
 package com.cytech.marketplace.dao;
 
+import com.cytech.marketplace.entity.Articles;
 import com.cytech.marketplace.entity.Users;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class UsersDAO {
     public static void addUser(Users user) {
@@ -87,5 +84,58 @@ public class UsersDAO {
             return false;
         }
         return BCrypt.checkpw(password, user.getPassword());
+    }
+
+    public static String cartToString(Map<Articles, Integer> cart) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Articles, Integer> entry : cart.entrySet()) {
+            sb.append(entry.getKey().getId().toString());
+            sb.append(":");
+            sb.append(entry.getValue());
+            sb.append(",");
+        }
+        return sb.toString();
+    }
+
+    public static Map<Articles, Integer> stringToCart(String cart) {
+        Map<Articles, Integer> cartMap = new HashMap<>();
+
+        if (cart == null || cart.isEmpty()) {
+            return cartMap;
+        }
+
+        String[] cartArray = cart.split(",");
+        for (String cartItem : cartArray) {
+            String[] cartItemArray = cartItem.split(":");
+            Articles article = ArticlesDAO.getArticle(UUID.fromString(cartItemArray[0]));
+            int quantity = Integer.parseInt(cartItemArray[1]);
+            cartMap.put(article, quantity);
+        }
+        return cartMap;
+    }
+
+    public static Map<Articles, Integer> getCart(Users user) {
+        return stringToCart(user.getCart());
+    }
+
+    public static void setCart(Users user, Map<Articles, Integer> cart) {
+        user.setCart(cartToString(cart));
+        updateUser(user);
+    }
+
+    /**
+     * Add an article to the database cart.
+     * @param user      The user to add the article to the cart.
+     * @param article   The article to add to the cart.
+     * @param quantity  The quantity of the article to add to the cart.
+     */
+    public static void addArticleToCart(Users user, Articles article, int quantity) {
+        Map<Articles, Integer> cart = getCart(user);
+        if (cart.containsKey(article)) {
+            cart.put(article, quantity + cart.get(article));
+        } else {
+            cart.put(article, quantity);
+        }
+        setCart(user, cart);
     }
 }
