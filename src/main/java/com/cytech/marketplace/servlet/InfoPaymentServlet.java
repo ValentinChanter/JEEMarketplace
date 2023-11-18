@@ -25,8 +25,26 @@ public class InfoPaymentServlet extends HttpServlet {
         return false;
     }
 
+    private boolean checkLuhn(String numeroCarte) {
+        String numeroCarteSansEspace = numeroCarte.replaceAll("\\s+", "");
+        int somme = 0;
+        boolean pair = false;
+        for (int i = numeroCarteSansEspace.length() - 1; i >= 0; i--) {
+            int chiffre = Integer.parseInt(numeroCarteSansEspace.substring(i, i + 1));
+            if (pair) {
+                chiffre *= 2;
+                if (chiffre > 9) {
+                    chiffre -= 9;
+                }
+            }
+            somme += chiffre;
+            pair = !pair;
+        }
+        return (somme % 10 == 0);
+    }
+
     private boolean checkValues(String nomCarte, String numeroCarte, String dateExpiration, String codeCarte) {
-        return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte);
+        return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte) && checkLuhn(numeroCarte);
     }
 
     @Override
