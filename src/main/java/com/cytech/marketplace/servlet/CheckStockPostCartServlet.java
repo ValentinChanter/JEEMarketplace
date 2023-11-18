@@ -30,6 +30,14 @@ public class CheckStockPostCartServlet extends HttpServlet {
 
             if (Integer.parseInt(value) == 0) {
                 cart.remove(article);
+                if (cart.isEmpty()) {
+                    if (users != null) {
+                        UsersDAO.setCart(users, null);
+                    }
+                    req.getRequestDispatcher("/WEB-INF/view/cart.jsp").forward(req, resp);
+                    return;
+                }
+
                 continue;
             }
 

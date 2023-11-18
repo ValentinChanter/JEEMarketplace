@@ -39,7 +39,7 @@
                                         value="${item.value}"
                                         type="number"
                                         step="1"
-                                        min="1"
+                                        min="0"
                                         max="${ArticlesDAO.getArticle(item.key.getId()).getStock()}"
                                         onkeyup="if(this.value > ${ArticlesDAO.getArticle(item.key.getId()).getStock()}) this.value = ${ArticlesDAO.getArticle(item.key.getId()).getStock()}; if(this.value < 0) this.value = 0;"
                                     />
