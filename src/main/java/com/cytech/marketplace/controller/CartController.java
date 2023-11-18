@@ -21,14 +21,6 @@ public class CartController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        /*
-        Object cartObject = req.getSession().getAttribute("cart");
-        Map<Articles, Integer> cart = cartObject == null ? new HashMap<>() : (HashMap<Articles, Integer>) cartObject;
-        Articles vittel = ArticlesDAO.getArticle("Bouteille 1L Vittel");
-        cart.put(vittel, 5);
-        req.getSession().setAttribute("cart", cart);
-         */
-
         req.getRequestDispatcher("/WEB-INF/view/cart.jsp").forward(req, resp);
     }
 }
