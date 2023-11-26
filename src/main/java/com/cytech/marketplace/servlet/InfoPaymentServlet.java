@@ -10,10 +10,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
+import java.util.Properties;
 
 @WebServlet(name = "infoPaymentServlet", value = "/infoPayment-servlet")
 public class InfoPaymentServlet extends HttpServlet {
@@ -50,6 +54,46 @@ public class InfoPaymentServlet extends HttpServlet {
         return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte) && checkLuhn(numeroCarte);
     }
 
+    private String cartRecapString(Map<Articles, Integer> cart) {
+        String cartRecap = "";
+
+        for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
+            Articles currentArticle = article.getKey();
+            int articleStock = article.getValue();
+
+            cartRecap += currentArticle.getName() + " : " + articleStock;
+        }
+
+        return cartRecap;
+    }
+
+    private void sendRecapMail(Users user, Map<Articles, Integer> cart) {
+        final String from = "marketplace.root@gmail.com";
+        final String pw = "aibygnesrjnpgnbj";
+        final String host = "smtp.gmail.com";
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.socketFactory.port", "465");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "465");
+
+        Authenticator auth = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, pw);
+            }
+        };
+
+        Session session = Session.getDefaultInstance(properties, auth);
+        EmailUtil.sendEmail(session, user.getEmail(),
+                "Récapitulatif de paiement", "Bonjour " + user.getName() + ",\n\n" +
+                "Nous vous remercions pour votre achat. Voici un récapitulatif de celui-ci :\n\n" +
+                cartRecapString(cart) + "\n\n" +
+                "Cordialement,\n" +
+                "L'équipe Marketplace");
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nomCarte = req.getParameter("nomCarte");
@@ -82,7 +126,8 @@ public class InfoPaymentServlet extends HttpServlet {
             req.getSession().removeAttribute("total");
             CartUtil.emptyCart(req);
 
-            //TODO : faire un mail de confirmation avec un résumé de la commande
+            // Envoie de l'email récapitulatif
+            sendRecapMail(user, cart);
 
             req.getRequestDispatcher("/WEB-INF/view/confirmationPayment.jsp").forward(req, resp);
         }
