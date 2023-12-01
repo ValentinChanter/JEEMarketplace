@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet(name = "infoPersonnalServlet", value = "/infoPersonnal-servlet")
@@ -43,6 +44,15 @@ public class InfoPersonnalServlet extends HttpServlet {
                 total = total.add(article.getKey().getPrice().multiply(BigDecimal.valueOf(article.getValue())));
             }
             req.getSession().setAttribute("total", total);
+
+            Map<String, String> personnalInformation = new HashMap<String, String>()
+            {{
+                put("nomComplet", nom);
+                put("adresse", adresse);
+                put("telephone", telephone);
+            }};
+
+            req.getSession().setAttribute("personnalInformation", personnalInformation);
 
             req.getRequestDispatcher("/WEB-INF/view/infopayment.jsp").forward(req, resp);
         }
