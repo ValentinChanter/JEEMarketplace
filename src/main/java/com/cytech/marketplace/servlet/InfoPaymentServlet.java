@@ -16,17 +16,19 @@ import javax.mail.Session;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 @WebServlet(name = "infoPaymentServlet", value = "/infoPayment-servlet")
 public class InfoPaymentServlet extends HttpServlet {
 
-    private boolean checkEmpty(String nomCarte, String numeroCarte, String dateExpiration, String codeCarte) {
+    private boolean checkEmpty(String nomCarte, String numeroCarte, String dateExpiration, String codeCarte, Object personnalInformationObject) {
         if((nomCarte == null || nomCarte.isEmpty()) ||
                 (numeroCarte == null || numeroCarte.isEmpty()) ||
                 (dateExpiration == null || dateExpiration.isEmpty()) ||
-                (codeCarte == null || codeCarte.isEmpty())) {
+                (codeCarte == null || codeCarte.isEmpty()) ||
+                (personnalInformationObject == null)) {
             return true;
         }
         return false;
@@ -50,24 +52,55 @@ public class InfoPaymentServlet extends HttpServlet {
         return (somme % 10 == 0);
     }
 
-    private boolean checkValues(String nomCarte, String numeroCarte, String dateExpiration, String codeCarte) {
-        return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte) && checkLuhn(numeroCarte);
+    private boolean checkValues(String nomCarte, String numeroCarte, String dateExpiration, String codeCarte, Object personnalInformationObject) {
+        return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte, personnalInformationObject) && checkLuhn(numeroCarte);
     }
 
     private String cartRecapString(Map<Articles, Integer> cart) {
         String cartRecap = "";
+        cartRecap += "Récapitulatif du panier :\n";
+        cartRecap += "Article | Quantité | Prix unitaire\n";
+        double prixTotal = 0;
 
         for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
             Articles currentArticle = article.getKey();
-            int articleStock = article.getValue();
+            int articleQuantite = article.getValue();
 
-            cartRecap += currentArticle.getName() + " : " + articleStock;
+            cartRecap += currentArticle.getName() + " | " + articleQuantite + " | " + currentArticle.getPrice() + "\n";
+
+            prixTotal += currentArticle.getPrice().doubleValue() * articleQuantite;
         }
+
+        // TODO : enlever la réduction des points de fidélité
+        cartRecap += "\nPrix total : " + prixTotal + "€";
 
         return cartRecap;
     }
 
-    private void sendRecapMail(Users user, Map<Articles, Integer> cart) {
+    private String shippingInformation(Map<String, String> personnalInformation) {
+        String shippingInformationString = "";
+        shippingInformationString += "Informations de livraison :\n";
+        shippingInformationString += "Nom complet : " + personnalInformation.get("nomComplet") + "\n";
+        shippingInformationString += "Adresse de livraison : " + personnalInformation.get("adresse") + "\n";
+        shippingInformationString += "Numéro de téléphone : " + personnalInformation.get("telephone") + "\n";
+
+        return shippingInformationString;
+    }
+
+    private String bodyEmail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation) {
+        String body = "Bonjour " + user.getName() + ",\n\n" +
+                "Nous vous remercions pour votre achat. Voici un récapitulatif de celui-ci :\n" +
+                "\n" +
+                shippingInformation(personnalInformation) +
+                "\n" +
+                cartRecapString(cart) + "\n\n" +
+                "Cordialement,\n" +
+                "L'équipe Marketplace";
+
+        return body;
+    }
+
+    private void sendRecapMail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation) {
         final String from = "marketplace.root@gmail.com";
         final String pw = "aibygnesrjnpgnbj";
         final String host = "smtp.gmail.com";
@@ -86,29 +119,33 @@ public class InfoPaymentServlet extends HttpServlet {
         };
 
         Session session = Session.getDefaultInstance(properties, auth);
-        EmailUtil.sendEmail(session, user.getEmail(),
-                "Récapitulatif de paiement", "Bonjour " + user.getName() + ",\n\n" +
-                "Nous vous remercions pour votre achat. Voici un récapitulatif de celui-ci :\n\n" +
-                cartRecapString(cart) + "\n\n" +
-                "Cordialement,\n" +
-                "L'équipe Marketplace");
+        EmailUtil.sendEmail(session, user.getEmail(), "Récapitulatif de paiement", bodyEmail(user, cart, personnalInformation));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // On récupère les champs du formulaire avec les informations de paiement
         String nomCarte = req.getParameter("nomCarte");
         String numeroCarte = req.getParameter("numeroCarte");
         String dateExpiration = req.getParameter("dateExpiration");
         String codeCarte = req.getParameter("codeCarte");
         String usePointsString = req.getParameter("usePoints");
+
+        // On récupère l'attribut permettant de savoir si l'utilisateur a utilisé ses points ou non
         boolean usePoints = usePointsString.equals("on");
 
-        boolean correctValues = checkValues(nomCarte, numeroCarte, dateExpiration, codeCarte);
+        // On récupère les informations entrées par l'utilisateur sur la page infopersonnal.jsp
+        Object personnalInformationObject = req.getSession().getAttribute("personnalInformation");
+
+        // On vérifie si l'ensemble des informations récupérées sont correctes ou non
+        boolean correctValues = checkValues(nomCarte, numeroCarte, dateExpiration, codeCarte, personnalInformationObject);
 
         if(correctValues) {
             Users user = (Users) req.getSession().getAttribute("user");
+            Map<String, String> personnalInformation = (Map<String, String>) personnalInformationObject;
             Map<Articles, Integer> cart = CartUtil.getCart(req);
 
+            // Pour chaque article, on modifie son stock
             for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
                 Articles modifiedArticle = article.getKey();
                 modifiedArticle.setStock(BigInteger.valueOf(modifiedArticle.getStock().intValue() - article.getValue()));
@@ -123,11 +160,14 @@ public class InfoPaymentServlet extends HttpServlet {
                 UsersDAO.addLoyaltyPoints(user, total.intValue());
             }
 
-            req.getSession().removeAttribute("total");
-            CartUtil.emptyCart(req);
-
             // Envoie de l'email récapitulatif
-            sendRecapMail(user, cart);
+            sendRecapMail(user, cart, personnalInformation);
+
+            // Supprimer toutes les variables de session qui ne sont plus utiles
+            CartUtil.emptyCart(req);
+            req.getSession().removeAttribute("total");
+            req.getSession().removeAttribute("personnalInformation");
+            req.getSession().removeAttribute("error");
 
             req.getRequestDispatcher("/WEB-INF/view/confirmationPayment.jsp").forward(req, resp);
         }
