@@ -132,7 +132,10 @@ public class InfoPaymentServlet extends HttpServlet {
         String usePointsString = req.getParameter("usePoints");
 
         // On récupère l'attribut permettant de savoir si l'utilisateur a utilisé ses points ou non
-        boolean usePoints = usePointsString.equals("on");
+        boolean usePoints = false;
+        if(usePointsString != null) {
+            usePoints = usePointsString.equals("on");
+        }
 
         // On récupère les informations entrées par l'utilisateur sur la page infopersonnal.jsp
         Object personnalInformationObject = req.getSession().getAttribute("personnalInformation");
