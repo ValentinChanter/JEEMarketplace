@@ -15,7 +15,7 @@
 <body>
     <%@ include file="components/header.jsp" %>
 
-    <h1>Nos produits</h1>
+    <div class="flex flex-col justify-center text-xl font-semibold p-3">Nos produits</div>
     <% for(Articles product : articles) { %>
 
         <c:url var="productURL" value="/productPage">
