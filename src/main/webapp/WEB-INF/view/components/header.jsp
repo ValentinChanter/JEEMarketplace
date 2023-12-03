@@ -4,8 +4,13 @@
 <html>
 <body>
 <div class="flex h-[100px] w-full flex-row justify-between p-4 shadow-lg">
-    <div class="flex w-48 flex-col justify-center bg-gray-400 text-center">Logo</div>
-    <div class="flex flex-row">
+    <div class="w-80"></div>
+    <a href="home">
+        <div class="flex w-48 flex-col justify-center text-center">
+            <img src="https://i.imgur.com/Ozypw75.png" alt="logo">
+        </div>
+    </a>
+    <div class="flex flex-row w-80">
         <form class="mr-4 flex h-[calc(100px-2*1rem)] w-[150px] flex-col justify-center" action="cart" method="post">
             <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">Panier</button>
         </form>
