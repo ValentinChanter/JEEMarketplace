@@ -61,10 +61,10 @@ public class SignupServlet extends HttpServlet {
         };
 
         Session session = Session.getDefaultInstance(properties, auth);
-        EmailUtil.sendEmail(session, email, "Bienvenue sur notre Marketplace", "Bonjour " + fullName + ",\n\n" +
-                "Nous vous souhaitons la bienvenue sur Marketplace. Vous pouvez dès à présent vous connecter à votre compte.\n\n" +
+        EmailUtil.sendEmail(session, email, "Bienvenue sur WA'ER", "Bonjour " + fullName + ",\n\n" +
+                "Nous vous souhaitons la bienvenue sur WA'ER. Vous pouvez dès à présent vous connecter à votre compte.\n\n" +
                 "Cordialement,\n" +
-                "L'équipe Marketplace");
+                "L'équipe de WA'ER");
 
         req.getSession().setAttribute("user", UsersDAO.getUser(email));
         resp.sendRedirect(getServletContext().getContextPath() + "/home");
