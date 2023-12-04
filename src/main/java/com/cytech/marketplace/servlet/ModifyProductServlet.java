@@ -1,9 +1,8 @@
 package com.cytech.marketplace.servlet;
 
 import com.cytech.marketplace.dao.ArticlesDAO;
-import com.cytech.marketplace.dao.UsersDAO;
 import com.cytech.marketplace.entity.Articles;
-import com.cytech.marketplace.tools.CheckIntFloat;
+import com.cytech.marketplace.utils.CheckIntFloat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
