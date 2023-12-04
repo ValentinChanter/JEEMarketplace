@@ -95,7 +95,7 @@ public class InfoPaymentServlet extends HttpServlet {
                 "\n" +
                 cartRecapString(cart) + "\n\n" +
                 "Cordialement,\n" +
-                "L'équipe WA'ER";
+                "L'équipe de WA'ER";
 
         return body;
     }
