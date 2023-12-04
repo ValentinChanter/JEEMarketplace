@@ -1,4 +1,4 @@
-package com.cytech.marketplace.tools;
+package com.cytech.marketplace.utils;
 
 public class CheckIntFloat {
 
