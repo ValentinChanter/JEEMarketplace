@@ -25,12 +25,12 @@ public class AuthServlet extends HttpServlet {
             req.getSession().setAttribute("user", users);
 
             Map<Articles, Integer> cart = CartUtil.getCart(req);
-            if (!cart.isEmpty() && !UsersDAO.getCart(users).isEmpty()) {
+            if (!cart.isEmpty() && !UsersUtil.getCart(users).isEmpty()) {
                 CartUtil.mergeCart(req, users);
             } else if (!cart.isEmpty()) {
-                UsersDAO.setCart(users, cart);
-            } else if (!UsersDAO.getCart(users).isEmpty()) {
-                req.getSession().setAttribute("cart", UsersDAO.getCart(users));
+                UsersUtil.setCart(users, cart);
+            } else if (!UsersUtil.getCart(users).isEmpty()) {
+                req.getSession().setAttribute("cart", UsersUtil.getCart(users));
             }
 
             resp.sendRedirect(getServletContext().getContextPath() + "/home");

@@ -18,7 +18,6 @@ import javax.mail.Session;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -160,9 +159,9 @@ public class InfoPaymentServlet extends HttpServlet {
             BigDecimal total = (BigDecimal) req.getSession().getAttribute("total");
             if (usePoints) {
                 total = total.subtract(new BigDecimal(user.getLoyaltyPoints()).divide(new BigDecimal(100)));
-                UsersDAO.removeLoyaltyPoints(user, user.getLoyaltyPoints().subtract(total.toBigInteger()));
+                UsersUtil.removeLoyaltyPoints(user, user.getLoyaltyPoints().subtract(total.toBigInteger()));
             } else {
-                UsersDAO.addLoyaltyPoints(user, total.intValue());
+                UsersUtil.addLoyaltyPoints(user, total.intValue());
             }
 
             // Envoie de l'email récapitulatif

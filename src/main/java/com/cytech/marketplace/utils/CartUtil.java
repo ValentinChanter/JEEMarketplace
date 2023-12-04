@@ -37,7 +37,7 @@ public class CartUtil {
 
         Users users = (Users) req.getSession().getAttribute("user");
         if (users != null) {
-            UsersDAO.addArticleToCart(users, article, quantity);
+            UsersUtil.addArticleToCart(users, article, quantity);
         }
     }
 
@@ -48,7 +48,7 @@ public class CartUtil {
      */
     public static void mergeCart(HttpServletRequest req, Users users) {
         Map<Articles, Integer> sessionCart = getCart(req);
-        Map<Articles, Integer> databaseCart = UsersDAO.getCart(users);
+        Map<Articles, Integer> databaseCart = UsersUtil.getCart(users);
 
         for (Map.Entry<Articles, Integer> entry : sessionCart.entrySet()) {
             if (databaseCart.containsKey(entry.getKey())) {
@@ -58,7 +58,7 @@ public class CartUtil {
             }
         }
 
-        UsersDAO.setCart(users, databaseCart);
+        UsersUtil.setCart(users, databaseCart);
         req.getSession().setAttribute("cart", databaseCart);
     }
 
@@ -66,7 +66,7 @@ public class CartUtil {
         req.getSession().removeAttribute("cart");
         Users users = (Users) req.getSession().getAttribute("user");
         if (users != null) {
-            UsersDAO.emptyCart(users);
+            UsersUtil.emptyCart(users);
         }
     }
 

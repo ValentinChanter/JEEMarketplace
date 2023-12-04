@@ -33,7 +33,7 @@ public class CheckStockPostCartServlet extends HttpServlet {
                 cart.remove(article);
                 if (cart.isEmpty()) {
                     if (users != null) {
-                        UsersDAO.setCart(users, null);
+                        UsersUtil.setCart(users, null);
                     }
                     req.getRequestDispatcher("/WEB-INF/view/cart.jsp").forward(req, resp);
                     return;
@@ -56,7 +56,7 @@ public class CheckStockPostCartServlet extends HttpServlet {
         }
 
         if (users != null) {
-            UsersDAO.setCart(users, cart);
+            UsersUtil.setCart(users, cart);
         }
 
         resp.sendRedirect(getServletContext().getContextPath() + "/infopersonnal");
