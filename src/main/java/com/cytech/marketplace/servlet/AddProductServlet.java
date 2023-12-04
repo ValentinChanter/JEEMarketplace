@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "addProductServlet", value = "/addProduct-servlet")
 public class AddProductServlet extends HttpServlet {
@@ -39,6 +41,8 @@ public class AddProductServlet extends HttpServlet {
 
         boolean correctValues = checkValues(nom, prix, stock, image);
 
+        req.getSession().removeAttribute("productInformation");
+
         if(correctValues) {
             // Ajouter produit à la bdd
             Articles newProduct = new Articles(nom, new BigDecimal(prix), new BigInteger(stock), image);
@@ -46,7 +50,16 @@ public class AddProductServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/view/productManagement.jsp").forward(req, resp);
         }
         else {
+            Map<String, String> productInformation = new HashMap<String, String>()
+            {{
+                put("nom", nom);
+                put("prix", prix);
+                put("stock", stock);
+                put("image", image);
+            }};
+
             req.setAttribute("error", true);
+            req.getSession().setAttribute("productInformation", productInformation);
             req.getRequestDispatcher("/WEB-INF/view/addProduct.jsp").forward(req, resp);
         }
     }
