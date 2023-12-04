@@ -1,7 +1,6 @@
-package com.cytech.marketplace.servlet;
+package com.cytech.marketplace.utils;
 
 import com.cytech.marketplace.dao.ArticlesDAO;
-import com.cytech.marketplace.dao.UsersDAO;
 import com.cytech.marketplace.entity.Articles;
 import com.cytech.marketplace.entity.Users;
 import jakarta.servlet.http.HttpServletRequest;

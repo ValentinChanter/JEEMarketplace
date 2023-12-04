@@ -1,5 +1,5 @@
 <%@ page import="com.cytech.marketplace.entity.Articles" %>
-<%@ page import="com.cytech.marketplace.servlet.CartUtil" %>
+<%@ page import="com.cytech.marketplace.utils.CartUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>

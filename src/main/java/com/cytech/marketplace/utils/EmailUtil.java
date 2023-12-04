@@ -1,4 +1,4 @@
-package com.cytech.marketplace.servlet;
+package com.cytech.marketplace.utils;
 
 import java.util.Date;
 

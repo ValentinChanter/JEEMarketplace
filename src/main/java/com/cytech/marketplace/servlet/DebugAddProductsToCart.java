@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.cytech.marketplace.servlet.CartUtil.addArticleToCart;
+import static com.cytech.marketplace.utils.CartUtil.addArticleToCart;
 
 @WebServlet(name = "debugAddProductsToCart", value = "/debug")
 public class DebugAddProductsToCart extends CartController {

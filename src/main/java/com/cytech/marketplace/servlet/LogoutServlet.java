@@ -2,6 +2,7 @@ package com.cytech.marketplace.servlet;
 
 import com.cytech.marketplace.entity.Articles;
 import com.cytech.marketplace.entity.Users;
+import com.cytech.marketplace.utils.CartUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

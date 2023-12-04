@@ -1,9 +1,11 @@
 package com.cytech.marketplace.servlet;
 
 import com.cytech.marketplace.dao.ArticlesDAO;
-import com.cytech.marketplace.dao.UsersDAO;
 import com.cytech.marketplace.entity.Articles;
 import com.cytech.marketplace.entity.Users;
+import com.cytech.marketplace.utils.CartUtil;
+import com.cytech.marketplace.utils.EmailUtil;
+import com.cytech.marketplace.utils.UsersUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

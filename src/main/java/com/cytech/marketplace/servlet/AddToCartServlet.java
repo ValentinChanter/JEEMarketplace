@@ -2,6 +2,7 @@ package com.cytech.marketplace.servlet;
 
 import com.cytech.marketplace.dao.ArticlesDAO;
 import com.cytech.marketplace.entity.Articles;
+import com.cytech.marketplace.utils.CartUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,8 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.UUID;
-
-import static com.cytech.marketplace.servlet.CartUtil.addArticleToCart;
 
 @WebServlet(name = "addToCartServlet", value = "/addToCart-servlet")
 public class AddToCartServlet extends HttpServlet {
