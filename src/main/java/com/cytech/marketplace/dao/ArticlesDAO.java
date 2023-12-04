@@ -16,7 +16,7 @@ public class ArticlesDAO {
         transaction.begin();
         em.persist(article);
         transaction.commit();
-        PersistenceUtil.shutdown();
+        em.close();
     }
 
     public static void updateArticle(Articles article) {
@@ -26,7 +26,7 @@ public class ArticlesDAO {
         transaction.begin();
         em.merge(article);
         transaction.commit();
-        PersistenceUtil.shutdown();
+        em.close();
     }
 
     public static void deleteArticle(Articles article) {
@@ -36,7 +36,7 @@ public class ArticlesDAO {
         transaction.begin();
         em.remove(em.contains(article) ? article : em.merge(article));
         transaction.commit();
-        PersistenceUtil.shutdown();
+        em.close();
     }
 
     public static void deleteArticle(UUID uuid) {
@@ -50,21 +50,21 @@ public class ArticlesDAO {
     public static Articles getArticle(UUID uuid) {
         EntityManager em = PersistenceUtil.getEmf().createEntityManager();
         Articles article = em.find(Articles.class, uuid);
-        PersistenceUtil.shutdown();
+        em.close();
         return article;
     }
 
     public static Articles getArticle(String name) {
         EntityManager em = PersistenceUtil.getEmf().createEntityManager();
         Articles article = em.createQuery("FROM Articles WHERE name = :name", Articles.class).setParameter("name", name).getSingleResult();
-        PersistenceUtil.shutdown();
+        em.close();
         return article;
     }
 
     public static List<Articles> getArticles() {
         EntityManager em = PersistenceUtil.getEmf().createEntityManager();
         List<Articles> articles = em.createQuery("FROM Articles", Articles.class).getResultList();
-        PersistenceUtil.shutdown();
+        em.close();
         return articles;
     }
 
