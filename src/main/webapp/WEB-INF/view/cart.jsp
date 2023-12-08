@@ -4,7 +4,18 @@
     <title>Panier</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        function calculateTotal() {
+            var items = document.querySelectorAll('[id$="-price"]');
+            var overallTotal = 0;
 
+            items.forEach(function(item) {
+                overallTotal += parseFloat(item.innerHTML);
+            });
+
+            document.getElementById('total').innerHTML = overallTotal.toFixed(2) + ' €';
+        }
+
+        window.onload = calculateTotal;
     </script>
 </head>
 <body>
@@ -31,6 +42,7 @@
                              </div>
                             <div class="flex flex-row">
                                 <div class="mx-4 flex flex-col justify-center">
+                                    <span id="${item.key.getId()}-price" class="mb-2 text-right">${item.key.getPrice() * item.value} €</span>
                                     <label for="${item.key.getId()}-input"></label>
                                     <input
                                         id="${item.key.getId()}-input"
@@ -41,7 +53,16 @@
                                         step="1"
                                         min="0"
                                         max="${ArticlesDAO.getArticle(item.key.getId()).getStock()}"
-                                        onkeyup="if(this.value > ${ArticlesDAO.getArticle(item.key.getId()).getStock()}) this.value = ${ArticlesDAO.getArticle(item.key.getId()).getStock()}; if(this.value < 0) this.value = 0;"
+                                        onkeyup="
+                                            if(this.value > ${ArticlesDAO.getArticle(item.key.getId()).getStock()}) this.value = ${ArticlesDAO.getArticle(item.key.getId()).getStock()};
+                                            if(this.value < 0) this.value = 0;
+                                            document.getElementById('${item.key.getId()}-price').innerHTML = (${ArticlesDAO.getArticle(item.key.getId()).getPrice()} * this.value).toFixed(2) + ' €';
+                                            calculateTotal();
+                                        "
+                                        onchange="
+                                            document.getElementById('${item.key.getId()}-price').innerHTML = (${ArticlesDAO.getArticle(item.key.getId()).getPrice()} * this.value).toFixed(2) + ' €';
+                                            calculateTotal();
+                                        "
                                     />
                                 </div>
                             </div>
@@ -51,7 +72,15 @@
             </c:choose>
             </div>
             <c:if test="${not empty sessionScope.cart && sessionScope.cart.size() > 0}">
-                <button type="submit" class="w-full rounded-full bg-blue-400 px-5 py-3 text-center text-md font-medium text-white hover:bg-blue-500 focus:outline-none">Procéder au paiement</button>
+                <div class="flex flex-row justify-between">
+                    <div class="mr-4 flex w-48 flex-col rounded-full px-8 py-4 shadow-md">
+                        <span class="text-3xl font-bold">Total</span>
+                        <span class="text-right text-xl" id="total">${total} €</span>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <button type="submit" class="text-md rounded-full bg-blue-400 px-5 py-3 text-center font-medium text-white hover:bg-blue-500 focus:outline-none">Procéder au paiement</button>
+                    </div>
+                </div>
             </c:if>
         </form>
     </div>
