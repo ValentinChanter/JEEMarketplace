@@ -75,7 +75,7 @@
                 <div class="flex flex-row justify-between">
                     <div class="mr-4 flex w-48 flex-col rounded-full px-8 py-4 shadow-md">
                         <span class="text-3xl font-bold">Total</span>
-                        <span class="text-right text-xl" id="total">${total} €</span>
+                        <span class="text-right text-xl" id="total"></span>
                     </div>
                     <div class="flex flex-col justify-center">
                         <button type="submit" class="text-md rounded-full bg-blue-400 px-5 py-3 text-center font-medium text-white hover:bg-blue-500 focus:outline-none">Procéder au paiement</button>
