@@ -17,10 +17,6 @@
 
     <div class="flex flex-col justify-center text-xl font-semibold p-3">Nos produits</div>
     <% for(Articles product : articles) { %>
-
-        <c:url var="productURL" value="/productPage">
-            <c:param name="id" value="<%= product.getId().toString() %>"/>
-        </c:url>
         <a href="productPage?id=<%= product.getId() %>">
             <div class=" float-left w-64 h-64 border p-4 m-4 cursor-pointer">
                 <img src="<%= product.getImage() %>" alt="product image" class="mx-auto mb-2 max-h-32">
