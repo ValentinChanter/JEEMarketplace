@@ -39,6 +39,8 @@ public class ModifyProductServlet extends HttpServlet {
         String image = req.getParameter("image");
         String id = req.getParameter("id");
 
+        //TODO : bug quand un des champs est vide
+
         boolean correctValues = checkValues(nom, prix, stock, image);
 
         if(correctValues) {
@@ -48,6 +50,8 @@ public class ModifyProductServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/view/productManagement.jsp").forward(req, resp);
         }
         else {
+            Articles modifiedProduct = ArticlesDAO.getArticle(UUID.fromString(id));
+            req.setAttribute("produit", modifiedProduct);
             req.setAttribute("error", true);
             req.getRequestDispatcher("/WEB-INF/view/modifyProduct.jsp").forward(req, resp);
         }
