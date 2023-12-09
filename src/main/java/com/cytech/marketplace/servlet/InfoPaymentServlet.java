@@ -57,7 +57,7 @@ public class InfoPaymentServlet extends HttpServlet {
         return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte, personnalInformationObject) && checkLuhn(numeroCarte);
     }
 
-    private String cartRecapString(Map<Articles, Integer> cart) {
+    private String cartRecapString(Map<Articles, Integer> cart, BigDecimal total, BigInteger loyaltyPoints) {
         String cartRecap = "";
         cartRecap += "Récapitulatif du panier :\n";
         cartRecap += "Article | Quantité | Prix unitaire\n";
@@ -72,8 +72,9 @@ public class InfoPaymentServlet extends HttpServlet {
             prixTotal += currentArticle.getPrice().doubleValue() * articleQuantite;
         }
 
-        // TODO : enlever la réduction des points de fidélité
         cartRecap += "\nPrix total : " + prixTotal + "€";
+        cartRecap += "\nPoints de fidélité utilisés : " + loyaltyPoints;
+        cartRecap += "\nNouveaux total : " + total + "€";
 
         return cartRecap;
     }
@@ -88,20 +89,20 @@ public class InfoPaymentServlet extends HttpServlet {
         return shippingInformationString;
     }
 
-    private String bodyEmail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation) {
+    private String bodyEmail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation, BigDecimal total, BigInteger loyaltyPoints) {
         String body = "Bonjour " + user.getName() + ",\n\n" +
                 "Nous vous remercions pour votre achat. Voici un récapitulatif de celui-ci :\n" +
                 "\n" +
                 shippingInformation(personnalInformation) +
                 "\n" +
-                cartRecapString(cart) + "\n\n" +
+                cartRecapString(cart, total, loyaltyPoints) + "\n\n" +
                 "Cordialement,\n" +
                 "L'équipe de WA'ER";
 
         return body;
     }
 
-    private void sendRecapMail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation) {
+    private void sendRecapMail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation, BigDecimal total, BigInteger loyaltyPoints) {
         final String from = "marketplace.root@gmail.com";
         final String pw = "aibygnesrjnpgnbj";
         final String host = "smtp.gmail.com";
@@ -120,7 +121,7 @@ public class InfoPaymentServlet extends HttpServlet {
         };
 
         Session session = Session.getDefaultInstance(properties, auth);
-        EmailUtil.sendEmail(session, user.getEmail(), "Récapitulatif de paiement", bodyEmail(user, cart, personnalInformation));
+        EmailUtil.sendEmail(session, user.getEmail(), "Récapitulatif de paiement", bodyEmail(user, cart, personnalInformation, total, loyaltyPoints));
     }
 
     @Override
@@ -157,7 +158,9 @@ public class InfoPaymentServlet extends HttpServlet {
             }
 
             BigDecimal total = (BigDecimal) req.getSession().getAttribute("total");
+            BigInteger loyaltyPoints = new BigInteger(String.valueOf(0));
             if (usePoints) {
+                loyaltyPoints = user.getLoyaltyPoints();
                 total = total.subtract(new BigDecimal(user.getLoyaltyPoints()).divide(new BigDecimal(100)));
                 UsersUtil.removeLoyaltyPoints(user, user.getLoyaltyPoints().subtract(total.toBigInteger()));
             } else {
@@ -165,7 +168,7 @@ public class InfoPaymentServlet extends HttpServlet {
             }
 
             // Envoie de l'email récapitulatif
-            sendRecapMail(user, cart, personnalInformation);
+            sendRecapMail(user, cart, personnalInformation, total, loyaltyPoints);
 
             // Supprimer toutes les variables de session qui ne sont plus utiles
             CartUtil.emptyCart(req);
