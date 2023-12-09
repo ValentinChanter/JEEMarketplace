@@ -39,8 +39,6 @@ public class ModifyProductServlet extends HttpServlet {
         String image = req.getParameter("image");
         String id = req.getParameter("id");
 
-        //TODO : bug quand un des champs est vide
-
         boolean correctValues = checkValues(nom, prix, stock, image);
 
         if(correctValues) {
