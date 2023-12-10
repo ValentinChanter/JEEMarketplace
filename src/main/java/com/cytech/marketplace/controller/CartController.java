@@ -1,7 +1,5 @@
 package com.cytech.marketplace.controller;
 
-import com.cytech.marketplace.dao.ArticlesDAO;
-import com.cytech.marketplace.entity.Articles;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet(name = "cartController", value = "/cart")
 public class CartController extends HttpServlet {
