@@ -37,36 +37,37 @@
                         </tr>
                     </thead>
 
-                    <%
-                        for(Users user : users) {
-                    %>
-
                     <form action="updateFidelityPointsManagement-servlet" method="post">
+
+                        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                            Valider
+                        </button>
+
+                        <%
+                            for(Users user : users) {
+                        %>
+
                         <tr class="border-b dark:border-neutral-500">
                             <td class="whitespace-nowrap px-6 py-4"> <%= user.getName() %> </td>
-                            <td class="whitespace-nowrap px-6 py-4"> <input name="id" type="text" value="<%= user.getId() %>" readonly size="30"> </td>
+                            <td class="whitespace-nowrap px-6 py-4"> <%= user.getId() %> </td>
                             <td class="whitespace-nowrap px-6 py-4"> <%= user.getEmail() %> </td>
                             <td class="whitespace-nowrap px-6 py-4">
                                 <input
                                         type="number"
                                         class="block w-32 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-none"
-                                        name="loyaltyPoints"
+                                        name="<%= user.getId() %>"
                                         value="<%= user.getLoyaltyPoints() %>"
                                         step="1"
                                         min="0"
                                 >
                             </td>
-                            <td class="whitespace-nowrap px-6 py-4">
-                                <button type="submit" name="valider" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                                    Valider
-                                </button>
-                            </td>
                         </tr>
-                    </form>
 
-                    <%
-                        }
-                    %>
+                        <%
+                            }
+                        %>
+
+                    </form>
                 </table>
             </div>
         </div>
