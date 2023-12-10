@@ -16,6 +16,21 @@
 
 <h1 class="text-5xl font-extrabold dark:text-black px-8 pt-5">Page de gestion des produits</h1>
 
+<div class="w-4/5 bg-white shadow flex justify-between items-center py-5">
+    <div class="h-full w-full flex items-center">
+        <form action="productManagement" method="get">
+            <button type="submit" class="ml-2 px-10 bg-gray-300 hover:bg-gray-400 text-white font-bold rounded" disabled>
+                Gestion des produits
+            </button>
+        </form>
+        <form action="fidelityPointsManagement" method="get">
+            <button type="submit" class="ml-2 px-10 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded">
+                Gestion des points de fidélité
+            </button>
+        </form>
+    </div>
+</div>
+
 <br>
 <form action="addProduct" method="get" class="px-8">
     <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-4 px-8 text-xl rounded inline-flex items-center">Ajouter un produit</button>

@@ -16,6 +16,21 @@
 
 <h1 class="text-5xl font-extrabold dark:text-black px-8 pt-5">Page de gestion des points de fidélité</h1>
 
+<div class="w-4/5 bg-white shadow flex justify-between items-center py-5">
+    <div class="h-full w-full flex items-center">
+        <form action="productManagement" method="get">
+            <button type="submit" class="ml-2 px-10 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded">
+                Gestion des produits
+            </button>
+        </form>
+        <form action="fidelityPointsManagement" method="get">
+            <button type="submit" class="ml-2 px-10 bg-gray-300 hover:bg-gray-400 text-white font-bold rounded" disabled>
+                Gestion des points de fidélité
+            </button>
+        </form>
+    </div>
+</div>
+
 <p class="dark:text-black px-8 pt-5">Vous pouvez modifier le nombre de points de fidélité des utilisateurs, puis appuyer sur le bouton Valider pour que les changements soient effectifs.</p>
 
 <br>
