@@ -57,73 +57,6 @@ public class InfoPaymentServlet extends HttpServlet {
         return !checkEmpty(nomCarte, numeroCarte, dateExpiration, codeCarte, personnalInformationObject) && checkLuhn(numeroCarte);
     }
 
-    private String cartRecapString(Map<Articles, Integer> cart, BigDecimal total, BigInteger loyaltyPoints) {
-        String cartRecap = "";
-        cartRecap += "Récapitulatif du panier :\n";
-        cartRecap += "Article | Quantité | Prix unitaire\n";
-        double prixTotal = 0;
-
-        for (Map.Entry<Articles, Integer> article : cart.entrySet()) {
-            Articles currentArticle = article.getKey();
-            int articleQuantite = article.getValue();
-
-            cartRecap += currentArticle.getName() + " | " + articleQuantite + " | " + currentArticle.getPrice() + "\n";
-
-            prixTotal += currentArticle.getPrice().doubleValue() * articleQuantite;
-        }
-
-        cartRecap += "\nPrix total : " + prixTotal + "€";
-        cartRecap += "\nPoints de fidélité utilisés : " + loyaltyPoints;
-        cartRecap += "\nNouveaux total : " + total + "€";
-
-        return cartRecap;
-    }
-
-    private String shippingInformation(Map<String, String> personnalInformation) {
-        String shippingInformationString = "";
-        shippingInformationString += "Informations de livraison :\n";
-        shippingInformationString += "Nom complet : " + personnalInformation.get("nomComplet") + "\n";
-        shippingInformationString += "Adresse de livraison : " + personnalInformation.get("adresse") + "\n";
-        shippingInformationString += "Numéro de téléphone : " + personnalInformation.get("telephone") + "\n";
-
-        return shippingInformationString;
-    }
-
-    private String bodyEmail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation, BigDecimal total, BigInteger loyaltyPoints) {
-        String body = "Bonjour " + user.getName() + ",\n\n" +
-                "Nous vous remercions pour votre achat. Voici un récapitulatif de celui-ci :\n" +
-                "\n" +
-                shippingInformation(personnalInformation) +
-                "\n" +
-                cartRecapString(cart, total, loyaltyPoints) + "\n\n" +
-                "Cordialement,\n" +
-                "L'équipe de WA'ER";
-
-        return body;
-    }
-
-    private void sendRecapMail(Users user, Map<Articles, Integer> cart, Map<String, String> personnalInformation, BigDecimal total, BigInteger loyaltyPoints) {
-        final String from = "marketplace.root@gmail.com";
-        final String pw = "aibygnesrjnpgnbj";
-        final String host = "smtp.gmail.com";
-
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-
-        Authenticator auth = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, pw);
-            }
-        };
-
-        Session session = Session.getDefaultInstance(properties, auth);
-        EmailUtil.sendEmail(session, user.getEmail(), "Récapitulatif de paiement", bodyEmail(user, cart, personnalInformation, total, loyaltyPoints));
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // On récupère les champs du formulaire avec les informations de paiement
@@ -168,7 +101,7 @@ public class InfoPaymentServlet extends HttpServlet {
             }
 
             // Envoie de l'email récapitulatif
-            sendRecapMail(user, cart, personnalInformation, total, loyaltyPoints);
+            EmailUtil.sendRecapMail(user, cart, personnalInformation, total, loyaltyPoints);
 
             // Supprimer toutes les variables de session qui ne sont plus utiles
             CartUtil.emptyCart(req);
