@@ -1,6 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.cytech.marketplace.entity.Articles" %>
-<%@ page import="com.cytech.marketplace.dao.ArticlesDAO" %>
 <%@ page import="com.cytech.marketplace.entity.Users" %>
 <%@ page import="com.cytech.marketplace.dao.UsersDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
