@@ -10,18 +10,13 @@
             <img src="https://i.imgur.com/Ozypw75.png" alt="logo">
         </div>
     </a>
-    <div class="flex flex-row w-80">
+    <div class="flex flex-row w-80 mr-10">
         <form class="mr-4 flex h-[calc(100px-2*1rem)] w-[150px] flex-col justify-center" action="cart" method="post">
             <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">Panier</button>
         </form>
         <c:if test="${sessionScope.user.getAdmin() eq true}">
-            <form class="mr-4 flex h-[calc(100px-2*1rem)] w-[200px] flex-col justify-center" action="productManagement" method="get">
-                <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">Gestion des produits</button>
-            </form>
-        </c:if>
-        <c:if test="${sessionScope.user.getAdmin() eq true}">
-            <form class="mr-4 flex h-[calc(100px-2*1rem)] w-[200px] flex-col justify-center" action="fidelityPointsManagement" method="get">
-                <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">Gestion des points de fidélité</button>
+            <form class="mr-4 flex h-[calc(100px-2*1rem)] w-[150px] flex-col justify-center" action="productManagement" method="get">
+                <button class="rounded-full bg-blue-400 px-4 py-3 text-white hover:bg-blue-500 focus:outline-none" type="submit">Dashboard</button>
             </form>
         </c:if>
         <form class="flex h-[calc(100px-2*1rem)] w-[150px] flex-col justify-center" action=
