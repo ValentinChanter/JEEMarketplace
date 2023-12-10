@@ -65,6 +65,17 @@ public class UsersDAO {
         return user;
     }
 
+    public static List<Users> getAllUsers() {
+        EntityManager em = PersistenceUtil.getEmf().createEntityManager();
+        List<Users> users = em.createQuery("FROM Users", Users.class).getResultList();
+        if (users.isEmpty()) {
+            return null;
+        }
+
+        em.close();
+        return users;
+    }
+
     public static List<Users> getUsersByName(String name) {
         EntityManager em = PersistenceUtil.getEmf().createEntityManager();
         List<Users> users = em.createQuery("FROM Users WHERE name = :name", Users.class).setParameter("name", name).getResultList();
